@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ROCK — 밴드부 지원</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app-page">
+        <header>
+            <div class="header-bg-text">MIRIM THE ROCK</div>
+            <div class="header-inner">
+                <div class="band-tag">2025 신입 모집</div>
+                <h1>밴드부<span>AUDITION</span></h1>
+                <p class="subtitle">Mirim The Rock Band Club — Application Form</p>
+                <div class="deadline-badge"><span class="dot"></span>모집 마감 : 2025년 4월 30일</div>
+            </div>
+            <a class="admin-link" onclick="showAdminPage()">관리자 ▸</a>
+        </header>
+
+        <main>
+            <div class="progress-bar">
+                <div class="progress-step active">01 기본정보</div>
+                <div class="progress-step">02 음악정보</div>
+                <div class="progress-step">03 자기소개</div>
+                <div class="progress-step">04 확인</div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div class="form-section active" id="step-0">
+                <div class="form-counter">01</div>
+                <div class="section-label">Basic Information</div>
+                <div class="section-title">기본 정보를 입력해주세요</div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label>이름<span class="req">*</span></label>
+                        <input type="text" id="name" placeholder="홍길동" oninput="clearErr('name')">
+                        <span class="error-msg" id="err-name">이름을 입력해주세요.</span>
+                    </div>
+                    <div class="field">
+                        <label>학번 / 사번<span class="req">*</span></label>
+                        <input type="text" id="student-id" placeholder="0000" oninput="clearErr('student-id')">
+                        <span class="error-msg" id="err-student-id">학번 또는 사번을 입력해주세요.</span>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label>학과 / 소속<span class="req">*</span></label>
+                        <input type="text" id="dept" placeholder="음악학과" oninput="clearErr('dept')">
+                        <span class="error-msg" id="err-dept">학과 또는 소속을 입력해주세요.</span>
+                    </div>
+                    <div class="field">
+                        <label>학년<span class="req">*</span></label>
+                        <select id="grade" onchange="clearErr('grade')">
+                            <option value="">선택하세요</option>
+                            <option>1학년</option>
+                            <option>2학년</option>
+                        </select>
+                        <span class="error-msg" id="err-grade">학년을 선택해주세요.</span>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label>연락처<span class="req">*</span></label>
+                        <input type="tel" id="phone" placeholder="010-0000-0000" oninput="clearErr('phone')">
+                        <span class="error-msg" id="err-phone">연락처를 입력해주세요.</span>
+                    </div>
+                    <div class="field">
+                        <label>이메일<span class="req">*</span></label>
+                        <input type="email" id="email" placeholder="your@email.com" oninput="clearErr('email')">
+                        <span class="error-msg" id="err-email">올바른 이메일을 입력해주세요.</span>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <div></div>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">다음으로 →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="form-section" id="step-1">
+                <div class="form-counter">02</div>
+                <div class="section-label">Music Profile</div>
+                <div class="section-title">음악 관련 정보를 알려주세요</div>
+                <div class="field" style="margin-bottom:24px">
+                    <label>담당 파트<span class="req">*</span> <span
+                            style="font-size:10px;color:#888;text-transform:none;letter-spacing:0">(복수 선택
+                            가능)</span></label>
+                    <div class="instrument-grid" id="instrument-grid">
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'보컬')"><span class="icon">🎤</span>보컬
+                        </div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'일렉기타')"><span
+                                class="icon">🎸</span>일렉기타</div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'베이스')"><span
+                                class="icon">🎵</span>베이스</div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'드럼')"><span class="icon">🥁</span>드럼
+                        </div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'키보드')"><span
+                                class="icon">🎹</span>키보드</div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'어쿠스틱기타')"><span
+                                class="icon">🎸</span>어쿠스틱</div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'바이올린')"><span
+                                class="icon">🎻</span>바이올린</div>
+                        <div class="instrument-btn" onclick="toggleInstrument(this,'기타파트')"><span
+                                class="icon">🎼</span>기타 파트</div>
+                    </div>
+                    <span class="error-msg" id="err-instrument">담당 파트를 하나 이상 선택해주세요.</span>
+                </div>
+                <div class="field" style="margin-bottom:24px">
+                    <label>연주 경력<span class="req">*</span></label>
+                    <div class="level-grid" id="level-grid">
+                        <button type="button" class="level-btn" onclick="selectLevel(this,'입문')">입문<br><span
+                                style="font-size:10px;opacity:0.6">6개월 미만</span></button>
+                        <button type="button" class="level-btn" onclick="selectLevel(this,'초급')">초급<br><span
+                                style="font-size:10px;opacity:0.6">6개월~2년</span></button>
+                        <button type="button" class="level-btn" onclick="selectLevel(this,'중급')">중급<br><span
+                                style="font-size:10px;opacity:0.6">2년~5년</span></button>
+                        <button type="button" class="level-btn" onclick="selectLevel(this,'고급')">고급<br><span
+                                style="font-size:10px;opacity:0.6">5년 이상</span></button>
+                    </div>
+                    <span class="error-msg" id="err-level">연주 경력을 선택해주세요.</span>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label>좋아하는 음악 장르<span class="req">*</span></label>
+                        <input type="text" id="genre" placeholder="예: 록, 재즈, R&amp;B, 인디팝 등 자유롭게"
+                            oninput="clearErr('genre')">
+                        <span class="error-msg" id="err-genre">장르를 입력해주세요.</span>
+                    </div>
+                    <div class="field">
+                        <label>이전 밴드 / 동아리 경험</label>
+                        <input type="text" id="prev-band" placeholder="경험 있으면 입력 (없으면 생략)">
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="field">
+                        <label>오디션 신청 곡목<span class="req">*</span></label>
+                        <input type="text" id="audition-song" placeholder="예: Radiohead — Creep"
+                            oninput="clearErr('audition-song')">
+                        <span class="error-msg" id="err-audition-song">오디션 곡목을 입력해주세요.</span>
+                        <p class="hint">미정이라면 '미정'으로 기재해도 됩니다.</p>
+                    </div>
+                    <div class="field">
+                        <label>기숙사 거주 여부<span class="req">*</span></label>
+                        <div class="dorm-grid" id="dorm-grid">
+                            <button type="button" class="level-btn" onclick="selectDorm(this,'거주 중')">거주 중</button>
+                            <button type="button" class="level-btn" onclick="selectDorm(this,'비거주')">비거주</button>
+                        </div>
+                        <span class="error-msg" id="err-dorm">기숙사 여부를 선택해주세요.</span>
+                    </div>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-prev" onclick="prevStep()">← 이전</button>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">다음으로 →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="form-section" id="step-2">
+                <div class="form-counter">03</div>
+                <div class="section-label">Introduction</div>
+                <div class="section-title">당신을 소개해주세요</div>
+                <div class="field" style="margin-bottom:24px">
+                    <label>지원 동기<span class="req">*</span></label>
+                    <textarea id="motivation" placeholder="밴드부에 지원하게 된 계기와 기대하는 활동에 대해 자유롭게 서술해주세요."
+                        oninput="clearErr('motivation')"></textarea>
+                    <span class="error-msg" id="err-motivation">지원 동기를 입력해주세요.</span>
+                </div>
+                <div class="field" style="margin-bottom:24px">
+                    <label>음악적 목표 / 하고 싶은 것</label>
+                    <textarea id="goals" placeholder="밴드부에서 이루고 싶은 것, 함께 해보고 싶은 음악적 경험 등을 알려주세요."
+                        style="min-height:100px"></textarea>
+                </div>
+                <div class="field" style="margin-bottom:24px">
+                    <label>본인을 표현하는 아티스트 또는 앨범</label>
+                    <input type="text" id="artist" placeholder="예: Nirvana — Nevermind, 혹은 아이유">
+                    <p class="hint">당신의 음악 취향을 가장 잘 보여주는 아티스트나 앨범을 적어주세요.</p>
+                </div>
+                <hr class="divider">
+                <div class="field">
+                    <label>개인정보 수집 및 이용 동의<span class="req">*</span></label>
+                    <div class="check-group">
+                        <div class="check-item" id="agree-check" onclick="toggleAgree(this)">
+                            <span class="check-box"></span>
+                            수집하는 개인정보(이름, 학번, 연락처, 이메일)는 밴드부 지원 심사 목적으로만 사용되며, 결과 발표 후 파기됩니다. 이에 동의합니다.
+                        </div>
+                    </div>
+                    <span class="error-msg" id="err-agree">개인정보 수집 및 이용에 동의해주세요.</span>
+                </div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-prev" onclick="prevStep()">← 이전</button>
+                    <button type="button" class="btn btn-next" onclick="nextStep()">다음으로 →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="form-section" id="step-3">
+                <div class="form-counter">04</div>
+                <div class="section-label">Final Review</div>
+                <div class="section-title">내용을 최종 확인해주세요</div>
+                <div id="review-content" style="border:1px solid var(--border);margin-bottom:40px"></div>
+                <div class="nav-buttons">
+                    <button type="button" class="btn btn-prev" onclick="prevStep()">← 이전</button>
+                    <button type="button" class="btn btn-submit" id="submit-btn" onclick="submitForm()"><span>지원서 제출하기
+                            ↗</span></button>
+                </div>
+            </div>
+
+            <div class="success-screen" id="success">
+                <div class="success-icon">✓</div>
+                <div class="success-title">지원 완료<span>!</span></div>
+                <p class="success-msg">지원서가 성공적으로 접수되었습니다.<br>심사 후 개별 연락을 드릴 예정이니<br>기다려 주세요. 🎸</p>
+                <div class="success-detail">
+                    <div><strong>결과 발표</strong> — 2025년 5월 7일 (예정)</div>
+                    <div><strong>오디션 일정</strong> — 2025년 5월 10–11일</div>
+                    <div><strong>문의</strong> — mirim.therock@band.club</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 관리자 -->
+    <div id="admin-page">
+        <div class="admin-header">
+            <div class="admin-logo">MIRIM THE ROCK <span>관리자 대시보드</span></div>
+            <div style="display:flex;gap:10px;align-items:center">
+                <button type="button" class="export-btn" onclick="refreshDashboard()" style="margin-left:0">↺
+                    새로고침</button>
+                <button type="button" class="admin-back" onclick="hideAdminPage()">← 지원 페이지로</button>
+            </div>
+        </div>
+        <div class="admin-login" id="admin-login">
+            <h2>관리자 로그인</h2>
+            <p>밴드부 관리자만 접근할 수 있습니다.</p>
+            <div class="login-field"><label>아이디</label><input type="text" id="login-id" placeholder="admin"
+                    onkeydown="if(event.key==='Enter')doLogin()"></div>
+            <div class="login-field"><label>비밀번호</label><input type="password" id="login-pw" placeholder="••••••••"
+                    onkeydown="if(event.key==='Enter')doLogin()"></div>
+            <div class="login-error" id="login-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+            <button type="button" class="btn-login" onclick="doLogin()">로그인</button>
+            <p style="font-size:11px;color:#555;margin-top:16px">기본 계정: admin / band2025</p>
+        </div>
+        <div class="admin-dashboard" id="admin-dashboard">
+            <div class="stats-row" id="stats-row"></div>
+            <div class="filter-bar">
+                <input type="text" id="search-input" placeholder="이름, 학과, 파트, 곡으로 검색..." oninput="renderTable()">
+                <button type="button" class="filter-btn active" data-filter="전체" onclick="setFilter(this)">전체</button>
+                <button type="button" class="filter-btn" data-filter="보컬" onclick="setFilter(this)">보컬</button>
+                <button type="button" class="filter-btn" data-filter="일렉기타" onclick="setFilter(this)">기타</button>
+                <button type="button" class="filter-btn" data-filter="베이스" onclick="setFilter(this)">베이스</button>
+                <button type="button" class="filter-btn" data-filter="드럼" onclick="setFilter(this)">드럼</button>
+                <button type="button" class="filter-btn" data-filter="키보드" onclick="setFilter(this)">키보드</button>
+                <button type="button" class="export-btn" onclick="exportCSV()">CSV 내보내기 ↓</button>
+            </div>
+            <table class="apps-table">
+                <thead>
+                    <tr>
+                        <th onclick="sortBy('no')">#</th>
+                        <th onclick="sortBy('name')">이름</th>
+                        <th onclick="sortBy('dept')">학과/학년</th>
+                        <th onclick="sortBy('instruments')">파트</th>
+                        <th onclick="sortBy('level')">경력</th>
+                        <th onclick="sortBy('genre')">장르</th>
+                        <th onclick="sortBy('song')">오디션 곡</th>
+                        <th onclick="sortBy('interviewSlot')">면접 일정</th>
+                        <th onclick="sortBy('submittedAt')">접수 일시</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody id="apps-tbody"></tbody>
+            </table>
+            <div class="empty-state" id="empty-state" style="display:none"><span class="big">EMPTY</span>아직 접수된 지원서가
+                없습니다.</div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-name" id="m-name"></div>
+                    <div class="modal-sub" id="m-sub"></div>
+                </div>
+                <button type="button" class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <label>심사 상태</label>
+                <select class="status-select-lg" id="modal-status" onchange="updateStatus()">
+                    <option value="pending">검토 중</option>
+                    <option value="pass">합격</option>
+                    <option value="fail">불합격</option>
+                </select>
+                <input class="modal-note-input" id="modal-note" type="text" placeholder="관리자 메모 (내부용)">
+                <button type="button" class="btn-save-note" onclick="saveNote()">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
