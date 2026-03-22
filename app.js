@@ -291,7 +291,7 @@ window.hideAdminPage = function () {
 window.doLogin = async function () {
   const id = document.getElementById('login-id').value.trim();
   const pw = document.getElementById('login-pw').value.trim();
-  if (id === 'admin' && pw === 'band2025') {
+  if (id === 'mirimtherock' && pw === 'wodud7540190!') {
     adminLoggedIn = true;
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-dashboard').classList.add('show');
