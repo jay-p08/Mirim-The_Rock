@@ -479,3 +479,9 @@ window.exportCSV = function () {
 };
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') window.closeModal(); });
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btn-next')?.addEventListener('click', () => nextStep());
+  document.getElementById('btn-prev')?.addEventListener('click', () => prevStep());
+  document.getElementById('btn-submit')?.addEventListener('click', () => submitForm());
+});
