@@ -1,15 +1,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
+
 // ── FIREBASE 설정 ──
 const firebaseConfig = {
-  apiKey: "AIzaSyDPsWwtAH5cYVInLSRcCHEoMUsBPI-Sygw",
-  authDomain: "mirim-the-rock.firebaseapp.com",
-  projectId: "mirim-the-rock",
-  storageBucket: "mirim-the-rock.firebasestorage.app",
-  messagingSenderId: "1084077105414",
-  appId: "1:1084077105414:web:8404f67b8f6b7a1f6afe87",
-  measurementId: "G-54LJGGS4WJ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
@@ -291,7 +292,7 @@ window.hideAdminPage = function () {
 window.doLogin = async function () {
   const id = document.getElementById('login-id').value.trim();
   const pw = document.getElementById('login-pw').value.trim();
-  if (id === 'mirimtherock' && pw === 'wodud7540190!') {
+  if (id === import.meta.env.VITE_ADMIN_ID && pw === import.meta.env.VITE_ADMIN_PW) {
     adminLoggedIn = true;
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-dashboard').classList.add('show');
