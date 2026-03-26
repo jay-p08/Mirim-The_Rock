@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
-
+import.meta.env
 
 // ── FIREBASE 설정 ──
 const firebaseConfig = {
@@ -29,9 +29,9 @@ async function loadApps() {
   }
 }
 
-async function addApp(app) {
+async function addApp(application) {
   try {
-    const docRef = await addDoc(collection(db, COLLECTION), app);
+    const docRef = await addDoc(collection(db, COLLECTION), application);
     return docRef.id;
   } catch (e) {
     console.error("Firestore 저장 실패:", e);
@@ -85,15 +85,22 @@ function goTo(s) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-window.nextStep = function () { if (validate(step)) { if (step === 2) buildReview(); if (step < 3) goTo(step + 1); } };
-window.prevStep = function () { if (step > 0) goTo(step - 1); };
+function nextStep() {
+  if (validate(step)) {
+    if (step === 2) buildReview();
+    if (step < 3) goTo(step + 1);
+  }
+}
+
+function prevStep() {
+  if (step > 0) goTo(step - 1);
+}
 
 // ── VALIDATION ──
 function clearErr(id) {
   const e = document.getElementById('err-' + id); if (e) e.classList.remove('show');
   const inp = document.getElementById(id); if (inp) inp.classList.remove('error');
 }
-window.clearErr = clearErr;
 
 function markErr(id, msg) {
   const inp = document.getElementById(id); if (inp) inp.classList.add('error');
@@ -158,49 +165,6 @@ function validate(s) {
   return ok;
 }
 
-// ── FORM INPUTS ──
-window.toggleInstrument = function (el, name) {
-  el.classList.toggle('selected');
-  instruments = el.classList.contains('selected')
-    ? [...new Set([...instruments, name])]
-    : instruments.filter(i => i !== name);
-  if (instruments.length > 0) {
-    document.getElementById('err-instrument').classList.remove('show');
-    document.getElementById('instrument-grid').classList.remove('error-sel');
-  }
-};
-
-window.selectLevel = function (el, lv) {
-  document.querySelectorAll('#level-grid .level-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  level = lv;
-  document.getElementById('err-level').classList.remove('show');
-  document.getElementById('level-grid').classList.remove('error-sel');
-};
-
-window.selectDorm = function (el, dormValue) {
-  document.querySelectorAll('#dorm-grid .level-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  dorm = dormValue;
-  document.getElementById('err-dorm').classList.remove('show');
-  document.getElementById('dorm-grid').classList.remove('error-sel');
-};
-
-window.toggleDay = function (el) {
-  el.classList.toggle('checked');
-  el.querySelector('.check-box').innerHTML = el.classList.contains('checked') ? '✓' : '';
-};
-
-window.toggleAgree = function (el) {
-  el.classList.toggle('checked');
-  el.querySelector('.check-box').innerHTML = el.classList.contains('checked') ? '✓' : '';
-  agreeChecked = el.classList.contains('checked');
-  if (agreeChecked) {
-    document.getElementById('err-agree').classList.remove('show');
-    el.classList.remove('error-sel');
-  }
-};
-
 // ── REVIEW ──
 function buildReview() {
   const rows = [
@@ -226,7 +190,7 @@ function buildReview() {
 }
 
 // ── SUBMIT ──
-window.submitForm = async function () {
+async function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
   loading(true);
@@ -263,7 +227,7 @@ window.submitForm = async function () {
     btn.disabled = false;
     toast('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
   }
-};
+}
 
 // ══════════════════════════════════
 // ADMIN
@@ -275,21 +239,21 @@ let sortKey = 'submittedAt';
 let sortDir = -1;
 let modalId = null;
 
-window.showAdminPage = function () {
+function showAdminPage() {
   document.getElementById('app-page').style.display = 'none';
   document.getElementById('admin-page').classList.add('show');
   if (!adminLoggedIn) {
     document.getElementById('admin-login').style.display = 'block';
     document.getElementById('admin-dashboard').classList.remove('show');
   }
-};
+}
 
-window.hideAdminPage = function () {
+function hideAdminPage() {
   document.getElementById('app-page').style.display = 'block';
   document.getElementById('admin-page').classList.remove('show');
-};
+}
 
-window.doLogin = async function () {
+async function doLogin() {
   const id = document.getElementById('login-id').value.trim();
   const pw = document.getElementById('login-pw').value.trim();
   if (id === import.meta.env.VITE_ADMIN_ID && pw === import.meta.env.VITE_ADMIN_PW) {
@@ -301,7 +265,7 @@ window.doLogin = async function () {
     document.getElementById('login-error').classList.add('show');
     document.getElementById('login-pw').value = '';
   }
-};
+}
 
 async function loadDashboard() {
   loading(true);
@@ -311,15 +275,14 @@ async function loadDashboard() {
   renderTable();
 }
 
-// 어드민 페이지에서 새로고침 버튼 역할
-window.refreshDashboard = async function () {
+async function refreshDashboard() {
   loading(true);
   allApps = await loadApps();
   loading(false);
   renderStats();
   renderTable();
   toast('새로고침 완료', 'var(--success)');
-};
+}
 
 function renderStats() {
   const total = allApps.length;
@@ -335,19 +298,19 @@ function renderStats() {
     <div class="stat-card"><div class="stat-num" style="font-size:32px;color:var(--muted)">${top}</div><div class="stat-label">최다 지원 파트</div></div>`;
 }
 
-window.setFilter = function (btn) {
+function setFilter(btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   filterPart = btn.dataset.filter;
   renderTable();
-};
+}
 
-window.sortBy = function (k) {
+function sortBy(k) {
   if (sortKey === k) sortDir *= -1; else { sortKey = k; sortDir = -1; }
   renderTable();
-};
+}
 
-window.renderTable = function () {
+function renderTable() {
   const q = (document.getElementById('search-input').value || '').toLowerCase();
   let list = allApps.filter(a => {
     const mf = filterPart === '전체' || (a.instruments || []).some(p => p.includes(filterPart));
@@ -373,7 +336,7 @@ window.renderTable = function () {
     const tags = (a.instruments || []).map(p => `<span class="tag ${tm[p] || 'other'}">${p}</span>`).join('');
     const dt = new Date(a.submittedAt);
     const ds = `${dt.getMonth() + 1}/${dt.getDate()} ${String(dt.getHours()).padStart(2, '0')}:${String(dt.getMinutes()).padStart(2, '0')}`;
-    return `<tr onclick="openModal('${a.docId}')">
+    return `<tr data-docid="${a.docId}">
       <td style="color:var(--muted)">${i + 1}</td>
       <td style="font-weight:500">${esc(a.name)}</td>
       <td style="font-size:12px;color:var(--muted)">${esc(a.dept)}<br>${esc(a.grade)}</td>
@@ -385,9 +348,14 @@ window.renderTable = function () {
       <td><span class="status-badge ${sc[a.status]}">${sl[a.status]}</span></td>
     </tr>`;
   }).join('');
-};
 
-window.openModal = function (docId) {
+  // 테이블 행 클릭 이벤트 (동적 요소라 renderTable 호출 시마다 재등록)
+  tb.querySelectorAll('tr[data-docid]').forEach(row => {
+    row.addEventListener('click', () => openModal(row.dataset.docid));
+  });
+}
+
+function openModal(docId) {
   const a = allApps.find(x => x.docId === docId);
   if (!a) return;
   modalId = docId;
@@ -423,15 +391,15 @@ window.openModal = function (docId) {
   document.getElementById('modal-note').value = a.note || '';
   document.getElementById('modal-overlay').classList.add('show');
   document.body.style.overflow = 'hidden';
-};
+}
 
-window.closeModal = function () {
+function closeModal() {
   document.getElementById('modal-overlay').classList.remove('show');
   document.body.style.overflow = '';
   modalId = null;
-};
+}
 
-window.updateStatus = async function () {
+async function updateStatus() {
   if (!modalId) return;
   const newStatus = document.getElementById('modal-status').value;
   const a = allApps.find(x => x.docId === modalId);
@@ -443,9 +411,9 @@ window.updateStatus = async function () {
   renderStats();
   renderTable();
   toast('상태가 저장되었습니다.', 'var(--success)');
-};
+}
 
-window.saveNote = async function () {
+async function saveNote() {
   if (!modalId) return;
   const note = document.getElementById('modal-note').value.trim();
   const a = allApps.find(x => x.docId === modalId);
@@ -455,11 +423,11 @@ window.saveNote = async function () {
   a.note = note;
   loading(false);
   toast('메모가 저장되었습니다.', 'var(--success)');
-  window.openModal(modalId);
-};
+  openModal(modalId);
+}
 
-window.exportCSV = function () {
-  const headers = ['번호', '이름', '학번', '학과', '학년', '연락처', '이메일', '파트', '경력', '장르', '오디션곡', '활동요일', '상태', '메모', '접수일시'];
+function exportCSV() {
+  const headers = ['번호', '이름', '학번', '학과', '학년', '연락처', '이메일', '파트', '경력', '장르', '오디션곡', '상태', '메모', '접수일시'];
   const rows = allApps.map((a, i) => [
     i + 1, a.name, a.studentId, a.dept, a.grade, a.phone, a.email,
     (a.instruments || []).join('/'), a.level, a.genre, a.song,
@@ -476,12 +444,108 @@ window.exportCSV = function () {
   el.click();
   URL.revokeObjectURL(url);
   toast('CSV 저장 완료', 'var(--success)');
-};
+}
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') window.closeModal(); });
-
+// ══════════════════════════════════
+// 이벤트 리스너 등록 (DOMContentLoaded)
+// ══════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btn-next')?.addEventListener('click', () => nextStep());
-  document.getElementById('btn-prev')?.addEventListener('click', () => prevStep());
-  document.getElementById('btn-submit')?.addEventListener('click', () => submitForm());
+
+  // ── 폼 네비게이션 ──
+  document.getElementById('next-0')?.addEventListener('click', nextStep);
+  document.getElementById('next-1')?.addEventListener('click', nextStep);
+  document.getElementById('next-2')?.addEventListener('click', nextStep);
+  document.getElementById('prev-1')?.addEventListener('click', prevStep);
+  document.getElementById('prev-2')?.addEventListener('click', prevStep);
+  document.getElementById('prev-3')?.addEventListener('click', prevStep);
+  document.getElementById('submit-btn')?.addEventListener('click', submitForm);
+
+  // ── 입력 필드 에러 초기화 ──
+  ['name', 'student-id', 'dept', 'phone', 'email', 'genre', 'audition-song', 'motivation'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => clearErr(id));
+  });
+  document.getElementById('grade')?.addEventListener('change', () => clearErr('grade'));
+
+  // ── 악기 선택 ──
+  document.querySelectorAll('.instrument-btn[data-instrument]').forEach(el => {
+    el.addEventListener('click', () => {
+      el.classList.toggle('selected');
+      const name = el.dataset.instrument;
+      instruments = el.classList.contains('selected')
+        ? [...new Set([...instruments, name])]
+        : instruments.filter(i => i !== name);
+      if (instruments.length > 0) {
+        document.getElementById('err-instrument').classList.remove('show');
+        document.getElementById('instrument-grid').classList.remove('error-sel');
+      }
+    });
+  });
+
+  // ── 레벨 선택 ──
+  document.querySelectorAll('#level-grid .level-btn[data-level]').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#level-grid .level-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      level = el.dataset.level;
+      document.getElementById('err-level').classList.remove('show');
+      document.getElementById('level-grid').classList.remove('error-sel');
+    });
+  });
+
+  // ── 기숙사 선택 ──
+  document.querySelectorAll('#dorm-grid .level-btn[data-dorm]').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#dorm-grid .level-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      dorm = el.dataset.dorm;
+      document.getElementById('err-dorm').classList.remove('show');
+      document.getElementById('dorm-grid').classList.remove('error-sel');
+    });
+  });
+
+  // ── 개인정보 동의 ──
+  document.getElementById('agree-check')?.addEventListener('click', function () {
+    this.classList.toggle('checked');
+    this.querySelector('.check-box').innerHTML = this.classList.contains('checked') ? '✓' : '';
+    agreeChecked = this.classList.contains('checked');
+    if (agreeChecked) {
+      document.getElementById('err-agree').classList.remove('show');
+      this.classList.remove('error-sel');
+    }
+  });
+
+  // ── 관리자 ──
+  document.getElementById('admin-link')?.addEventListener('click', showAdminPage);
+  document.getElementById('admin-back')?.addEventListener('click', hideAdminPage);
+  document.getElementById('refresh-btn')?.addEventListener('click', refreshDashboard);
+  document.getElementById('login-btn')?.addEventListener('click', doLogin);
+  document.getElementById('export-btn')?.addEventListener('click', exportCSV);
+
+  // ── 로그인 Enter키 ──
+  document.getElementById('login-id')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-pw')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  // ── 필터 버튼 ──
+  document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => setFilter(btn));
+  });
+
+  // ── 테이블 정렬 ──
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => sortBy(th.dataset.sort));
+  });
+
+  // ── 검색 ──
+  document.getElementById('search-input')?.addEventListener('input', renderTable);
+
+  // ── 모달 ──
+  document.getElementById('modal-close')?.addEventListener('click', closeModal);
+  document.getElementById('modal-overlay')?.addEventListener('click', e => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+  document.getElementById('modal-status')?.addEventListener('change', updateStatus);
+  document.getElementById('save-note-btn')?.addEventListener('click', saveNote);
+
+  // ── ESC 키 ──
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 });
