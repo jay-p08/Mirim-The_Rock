@@ -184,7 +184,7 @@ function buildReview() {
   document.getElementById('review-content').innerHTML = rows.map(([l, v]) => `
     <div style="display:flex;gap:20px;padding:14px 20px;border-bottom:1px solid #1a1a1a;align-items:flex-start">
       <span style="font-size:11px;letter-spacing:0.1em;color:#555;text-transform:uppercase;min-width:110px;flex-shrink:0;padding-top:2px">${l}</span>
-      <span style="font-size:13px;color:#e0e0e0;line-height:1.7">${esc(v)}</span>
+      <span style="font-size:13px;color:#0e0a0b;line-height:1.7">${esc(v)}</span>
     </div>`).join('');
 }
 
