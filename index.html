@@ -12,14 +12,37 @@
 
     <div id="app-page">
         <header>
-            <div class="header-bg-text">MIRIM THE ROCK</div>
+            <!-- scribbled text on the pink side -->
+            <div class="header-ticker">
+                <div class="header-ticker-inner">
+                    <div class="ticker-line">OH I'M AN ENGLISHMAN IN NEW YORK</div>
+                    <div class="ticker-line">I'M AN ALIEN — I'M A LEGAL ALIEN</div>
+                    <div class="ticker-line">SEE ME WALKING DOWN FIFTH AVENUE</div>
+                    <div class="ticker-line">OH I'M AN ENGLISHMAN IN NEW YORK</div>
+                    <div class="ticker-line">MODESTY, PROPRIETY CAN LEAD TO NOTORIETY</div>
+                    <div class="ticker-line">BE YOURSELF NO MATTER WHAT THEY SAY</div>
+                    <div class="ticker-line">I'M AN ALIEN — I'M A LEGAL ALIEN</div>
+                </div>
+            </div>
+
+            <!-- decorative stars on pink side -->
+            <div class="header-stars">
+                <div class="star-deco star-lg"></div>
+                <div class="star-deco star-md"></div>
+                <div class="star-deco star-sm"></div>
+                <div class="star-deco star-sm2"></div>
+            </div>
+
             <div class="header-inner">
                 <div class="band-tag">2026 밴드부 3기 신입 모집</div>
                 <h1>밴드부<span>AUDITION</span></h1>
                 <p class="subtitle">Mirim The Rock Band Club — Application Form</p>
-                <div class="deadline-badge"><span class="dot"></span>모집 마감 : 2026년 3월 31일</div>
-                <div class="deadline-badge"><span class="dot"></span>면접 일정 : 2026년 4월 1일</div>
+                <div class="deadline-badges">
+                    <div class="deadline-badge"><span class="dot"></span>모집 마감 : 2026년 3월 31일</div>
+                    <div class="deadline-badge"><span class="dot"></span>면접 일정 : 2026년 4월 1일</div>
+                </div>
             </div>
+
             <a class="admin-link" id="admin-link">관리자 ▸</a>
         </header>
 
@@ -89,23 +112,28 @@
                 <div class="section-title">음악 관련 정보를 알려주세요</div>
                 <div class="field" style="margin-bottom:24px">
                     <label>담당 파트<span class="req">*</span> <span
-                            style="font-size:10px;color:#888;text-transform:none;letter-spacing:0">( 복수 선택가능 최대 2개 )</span></label>
+                            style="font-size:10px;color:#888;text-transform:none;letter-spacing:0;font-family:'Noto Sans KR',sans-serif">(
+                            복수 선택가능 최대 2개 )</span></label>
                     <div class="instrument-grid" id="instrument-grid">
-                        <div class="instrument-btn" data-instrument="보컬"><span class="icon"></span>보컬</div>
-                        <div class="instrument-btn" data-instrument="일렉기타"><span class="icon"></span>일렉기타</div>
-                        <div class="instrument-btn" data-instrument="베이스"><span class="icon"></span>베이스</div>
-                        <div class="instrument-btn" data-instrument="드럼"><span class="icon"></span>드럼</div>
-                        <div class="instrument-btn" data-instrument="키보드"><span class="icon"></span>키보드</div>
+                        <div class="instrument-btn" data-instrument="보컬"><span class="icon">🎤</span>보컬</div>
+                        <div class="instrument-btn" data-instrument="일렉기타"><span class="icon">🎸</span>일렉기타</div>
+                        <div class="instrument-btn" data-instrument="베이스"><span class="icon">🎵</span>베이스</div>
+                        <div class="instrument-btn" data-instrument="드럼"><span class="icon">🥁</span>드럼</div>
+                        <div class="instrument-btn" data-instrument="키보드"><span class="icon">🎹</span>키보드</div>
                     </div>
                     <span class="error-msg" id="err-instrument">담당 파트를 하나 이상 선택해주세요.</span>
                 </div>
                 <div class="field" style="margin-bottom:24px">
                     <label>연주 경력<span class="req">*</span></label>
                     <div class="level-grid" id="level-grid">
-                        <button type="button" class="level-btn" data-level="입문">입문<br><span style="font-size:10px;opacity:0.6">6개월 미만</span></button>
-                        <button type="button" class="level-btn" data-level="초급">초급<br><span style="font-size:10px;opacity:0.6">6개월~2년</span></button>
-                        <button type="button" class="level-btn" data-level="중급">중급<br><span style="font-size:10px;opacity:0.6">2년~5년</span></button>
-                        <button type="button" class="level-btn" data-level="고급">고급<br><span style="font-size:10px;opacity:0.6">5년 이상</span></button>
+                        <button type="button" class="level-btn" data-level="입문">입문<br><span
+                                style="font-size:10px;opacity:0.6">6개월 미만</span></button>
+                        <button type="button" class="level-btn" data-level="초급">초급<br><span
+                                style="font-size:10px;opacity:0.6">6개월~2년</span></button>
+                        <button type="button" class="level-btn" data-level="중급">중급<br><span
+                                style="font-size:10px;opacity:0.6">2년~5년</span></button>
+                        <button type="button" class="level-btn" data-level="고급">고급<br><span
+                                style="font-size:10px;opacity:0.6">5년 이상</span></button>
                     </div>
                     <span class="error-msg" id="err-level">연주 경력을 선택해주세요.</span>
                 </div>
@@ -184,7 +212,8 @@
                 <div class="form-counter">04</div>
                 <div class="section-label">Final Review</div>
                 <div class="section-title">내용을 최종 확인해주세요</div>
-                <div id="review-content" style="border:1px solid var(--border);margin-bottom:40px"></div>
+                <div id="review-content"
+                    style="border:2px solid var(--black);margin-bottom:40px;box-shadow:4px 4px 0 var(--black)"></div>
                 <div class="nav-buttons">
                     <button type="button" class="btn btn-prev" id="prev-3">← 이전</button>
                     <button type="button" class="btn btn-submit" id="submit-btn"><span>지원서 제출하기 ↗</span></button>
@@ -217,7 +246,8 @@
             <h2>관리자 로그인</h2>
             <p>밴드부 관리자만 접근할 수 있습니다.</p>
             <div class="login-field"><label>아이디</label><input type="text" id="login-id" placeholder="아이디를 입력하세요"></div>
-            <div class="login-field"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호를 입력하세요"></div>
+            <div class="login-field"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호를 입력하세요">
+            </div>
             <div class="login-error" id="login-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
             <button type="button" class="btn-login" id="login-btn">로그인</button>
         </div>
@@ -250,7 +280,8 @@
                 </thead>
                 <tbody id="apps-tbody"></tbody>
             </table>
-            <div class="empty-state" id="empty-state" style="display:none"><span class="big">EMPTY</span>아직 접수된 지원서가 없습니다.</div>
+            <div class="empty-state" id="empty-state" style="display:none"><span class="big">EMPTY</span>아직 접수된 지원서가
+                없습니다.</div>
         </div>
     </div>
 
