@@ -71,6 +71,17 @@ function loading(on) {
   document.getElementById('loading').classList.toggle('show', on);
 }
 
+// ── 기숙사 호실 칸 토글 ──
+function toggleDormRoom(show) {
+  const wrap = document.getElementById('dorm-room-wrap');
+  wrap.style.display = show ? 'block' : 'none';
+  if (!show) {
+    document.getElementById('dorm-room').value = '';
+    document.getElementById('err-dorm-room').classList.remove('show');
+    document.getElementById('dorm-room').classList.remove('error');
+  }
+}
+
 // ── NAVIGATION ──
 function goTo(s) {
   document.querySelectorAll('.form-section').forEach(x => x.classList.remove('active'));
@@ -144,6 +155,15 @@ function validate(s) {
       document.getElementById('err-dorm').classList.remove('show');
       document.getElementById('dorm-grid').classList.remove('error-sel');
     }
+    // 기숙사 거주 중인 경우 호실 필수 입력
+    if (dorm === '거주 중') {
+      if (!document.getElementById('dorm-room').value.trim()) {
+        markErr('dorm-room', '호실을 입력해주세요.');
+        ok = false;
+      } else {
+        clearErr('dorm-room');
+      }
+    }
   }
   if (s === 2) {
     if (!document.getElementById('motivation').value.trim()) { markErr('motivation'); ok = false; } else clearErr('motivation');
@@ -166,6 +186,10 @@ function validate(s) {
 
 // ── REVIEW ──
 function buildReview() {
+  const dormRoomVal = dorm === '거주 중'
+    ? `${dorm} (${document.getElementById('dorm-room').value})`
+    : dorm;
+
   const rows = [
     ['이름', document.getElementById('name').value],
     ['학번/사번', document.getElementById('student-id').value],
@@ -177,6 +201,7 @@ function buildReview() {
     ['선호 장르', document.getElementById('genre').value],
     ['오디션 곡목', document.getElementById('audition-song').value],
     ['이전 경험', document.getElementById('prev-band').value || '없음'],
+    ['기숙사', dormRoomVal],
     ['지원 동기', document.getElementById('motivation').value],
     ['음악적 목표', document.getElementById('goals').value || '—'],
     ['대표 아티스트', document.getElementById('artist').value || '—'],
@@ -209,6 +234,8 @@ async function submitForm() {
     genre: document.getElementById('genre').value,
     prevBand: document.getElementById('prev-band').value.trim(),
     song: document.getElementById('audition-song').value.trim(),
+    dorm,
+    dormRoom: dorm === '거주 중' ? document.getElementById('dorm-room').value.trim() : '',
     motivation: document.getElementById('motivation').value.trim(),
     goals: document.getElementById('goals').value.trim(),
     artist: document.getElementById('artist').value.trim(),
@@ -348,7 +375,6 @@ function renderTable() {
     </tr>`;
   }).join('');
 
-  // 테이블 행 클릭 이벤트 (동적 요소라 renderTable 호출 시마다 재등록)
   tb.querySelectorAll('tr[data-docid]').forEach(row => {
     row.addEventListener('click', () => openModal(row.dataset.docid));
   });
@@ -362,6 +388,12 @@ function openModal(docId) {
   document.getElementById('m-sub').textContent = `${a.dept} ${a.grade} · ${a.phone} · ${a.email}`;
   const tm = { 보컬: 'vocal', 일렉기타: 'guitar', 베이스: 'bass', 드럼: 'drum', 키보드: 'keyboard', 어쿠스틱기타: 'acoustic', 바이올린: 'violin' };
   const tags = (a.instruments || []).map(p => `<span class="tag ${tm[p] || 'other'}">${p}</span>`).join('');
+
+  // 기숙사 표시: 거주 중이면 호실도 함께
+  const dormDisplay = a.dorm === '거주 중' && a.dormRoom
+    ? `거주 중 <span style="font-weight:700;color:var(--pink)">(${esc(a.dormRoom)})</span>`
+    : esc(a.dorm || '—');
+
   document.getElementById('modal-body').innerHTML = `
     <div class="modal-section">
       <div class="modal-section-title">기본 정보</div>
@@ -378,6 +410,7 @@ function openModal(docId) {
       <div class="modal-row"><span class="modal-row-label">오디션 곡</span><span class="modal-row-val">${esc(a.song)}</span></div>
       <div class="modal-row"><span class="modal-row-label">이전 경험</span><span class="modal-row-val">${esc(a.prevBand || '없음')}</span></div>
       <div class="modal-row"><span class="modal-row-label">대표 아티스트</span><span class="modal-row-val">${esc(a.artist || '—')}</span></div>
+      <div class="modal-row"><span class="modal-row-label">기숙사</span><span class="modal-row-val">${dormDisplay}</span></div>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">지원 동기</div>
@@ -426,10 +459,12 @@ async function saveNote() {
 }
 
 function exportCSV() {
-  const headers = ['번호', '이름', '학번', '학과', '학년', '연락처', '이메일', '파트', '경력', '장르', '오디션곡', '상태', '메모', '접수일시'];
+  const headers = ['번호', '이름', '학번', '학과', '학년', '연락처', '이메일', '파트', '경력', '장르', '오디션곡', '기숙사', '호실', '상태', '메모', '접수일시'];
   const rows = allApps.map((a, i) => [
     i + 1, a.name, a.studentId, a.dept, a.grade, a.phone, a.email,
     (a.instruments || []).join('/'), a.level, a.genre, a.song,
+    a.dorm || '',
+    a.dormRoom || '',
     { pending: '검토중', pass: '합격', fail: '불합격' }[a.status],
     a.note || '',
     new Date(a.submittedAt).toLocaleString('ko-KR')
@@ -460,7 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('submit-btn')?.addEventListener('click', submitForm);
 
   // ── 입력 필드 에러 초기화 ──
-  ['name', 'student-id', 'dept', 'phone', 'email', 'genre', 'audition-song', 'motivation'].forEach(id => {
+  ['name', 'student-id', 'dept', 'phone', 'email', 'genre', 'audition-song', 'motivation', 'dorm-room'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', () => clearErr(id));
   });
   document.getElementById('grade')?.addEventListener('change', () => clearErr('grade'));
@@ -499,6 +534,9 @@ document.addEventListener('DOMContentLoaded', () => {
       dorm = el.dataset.dorm;
       document.getElementById('err-dorm').classList.remove('show');
       document.getElementById('dorm-grid').classList.remove('error-sel');
+
+      // 거주 중 선택 시 호실 입력 칸 표시
+      toggleDormRoom(dorm === '거주 중');
     });
   });
 
